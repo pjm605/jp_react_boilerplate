@@ -1,4 +1,5 @@
 const path = require('path');
+const combineLoaders = require('webpack-combine-loaders');
 
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const HtmlWebpackPluginConfig = new HtmlWebpackPlugin({
@@ -16,7 +17,22 @@ module.exports = {
 	module: {
 		loaders: [
 			{ test: /\.js$/, loader: 'babel-loader', exclude: /node_modules/ },
-			{ test: /\.jsx$/, loader: 'babel-loader', exclude: /node_modules/ }
+			{ test: /\.jsx$/, loader: 'babel-loader', exclude: /node_modules/ },
+			{
+				test: /\.css$/,
+				loader: combineLoaders([
+					{
+						loader: 'style-loader'	
+					},
+					{
+						loader: 'css-loader',
+						query: {
+							module: true,
+							localIdentName: '[name]__[local]__[hash:base64:5]'
+						}
+					}
+				])
+			}
 		]
 	},
 	plugins: [HtmlWebpackPluginConfig]
